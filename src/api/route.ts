@@ -1,6 +1,6 @@
-import { api } from '@/api/interceptor';
-import { RSP } from '@/types/common';
-import { User } from '@/types/user';
+import { api } from "@/api/interceptor"
+import { RSP } from "@/types/common"
+import { User } from "@/types/user"
 
 export const refreshTokenApi = async (
   refreshToken: string
@@ -20,12 +20,32 @@ export const refreshTokenApi = async (
 export const signUpApi = async (
   email: string,
   password: string
-): Promise<RSP<{
-  user:User,
-  accessToken:string,
-  refreshToken:string
-}>> => {
+): Promise<
+  RSP<{
+    user: User
+    accessToken: string
+    refreshToken: string
+  }>
+> => {
   const { data } = await api.post("/signup", {
+    email,
+    password,
+  })
+
+  return data
+}
+
+export const loginApi = async (
+  email: string,
+  password: string
+): Promise<
+  RSP<{
+    user: User
+    accessToken: string
+    refreshToken: string
+  }>
+> => {
+  const { data } = await api.post("/login", {
     email,
     password,
   })
