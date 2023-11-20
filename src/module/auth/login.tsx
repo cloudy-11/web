@@ -12,7 +12,7 @@ const Form: FC = () => {
     <div className="w-[400px] h-[300px] bg-white border border-1 border-black rounded-sm flex flex-col justify-center px-8 gap-4">
       <div className="text-2xl font-bold">XCloud</div>
       <div className="flex flex-col gap-1">
-        <div className="text-sm">{"Username"}</div>
+        <div className="text-sm">{"Email"}</div>
         <input className="outline-none border border-1 border-gray-500 rounded-sm px-2 py-1 " />
       </div>
       <div className="flex flex-col gap-1">
