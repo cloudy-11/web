@@ -9,9 +9,11 @@ import {
 import { RouterName } from "@/const/router"
 import Login from "@/module/auth/login"
 import Register from "@/module/auth/register"
+import HomeIndex from "@/module/code"
+import CodeCategoryIndex from "@/module/code/category"
+import CodeCategoryRoot from "@/module/code/category/route"
+import HomeRoot, { HomeLoader } from "@/module/code/route"
 import EnglishIndex from "@/module/english"
-import HomeIndex from "@/module/home"
-import HomeRoot from "@/module/home/route"
 
 export const RouterComponent: FC = () => {
   const routes: RouteObject[] = [
@@ -21,7 +23,13 @@ export const RouterComponent: FC = () => {
       children: [
         {
           index: true,
+          loader: HomeLoader,
           element: <HomeIndex />,
+        },
+        {
+          path: "code/:codeId",
+          element: <CodeCategoryRoot />,
+          children: [{ index: true, element: <CodeCategoryIndex /> }],
         },
         {
           path: RouterName.ENGLISH,

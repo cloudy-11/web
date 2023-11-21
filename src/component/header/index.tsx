@@ -4,19 +4,22 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 import logo from "@/assets/logo.png"
 import { WrapBtn } from "@/component/button"
+import { UserLogedin } from "@/component/header/user"
 import { RouterName } from "@/const/router"
+import { getUserLocal } from "@/utils/helper"
 
 const Left: FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
+  const path = `/${location.pathname.split("/")[1]}`
 
   const homeLocate =
-    location.pathname == RouterName.HOME
+    path === RouterName.HOME || path === RouterName.CODE
       ? "cursor-pointer bg-black text-white rounded-lg py-2 px-4"
       : "cursor-pointer  py-2 px-4"
 
   const engLocate =
-    location.pathname == RouterName.ENGLISH
+    path === RouterName.ENGLISH
       ? "cursor-pointer bg-black text-white rounded-lg py-2 px-4"
       : "cursor-pointer py-2 px-4"
 
@@ -40,6 +43,16 @@ const Left: FC = () => {
 
 const Right: FC = () => {
   const navigate = useNavigate()
+  const user = getUserLocal()
+
+  if (user) {
+    return (
+      <div className="w-1/2 flex flex-row justify-end items-center gap-4">
+        <UserLogedin user={user} />
+      </div>
+    )
+  }
+
   return (
     <div className="w-1/2 flex flex-row justify-end items-center gap-4">
       <div
@@ -55,7 +68,7 @@ const Right: FC = () => {
 
 const Header: FC = () => {
   return (
-    <div className="bg-[#E5EBFF] border-black border-b fixed py-2 px-8 h-[72px] w-full flex flex-row ">
+    <div className="bg-[#E5EBFF] border-black border-b-2 fixed py-2 px-8 h-[72px] w-full flex flex-row ">
       <Left />
       <Right />
     </div>
