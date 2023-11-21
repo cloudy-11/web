@@ -1,13 +1,21 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 
+import { AxiosError } from "axios"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 
-import { loginApi } from "@/api/route"
+import { loginApi, refreshTokenApi } from "@/api/route"
 import logo from "@/assets/logo.png"
 import { WrapBtn } from "@/component/button"
 import { RouterName } from "@/const/router"
-import { setAccessToken, setRefreshToken, setUserLocal } from "@/utils/helper"
+import { ErrorType } from "@/types/common"
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+  setUserLocal,
+} from "@/utils/helper"
 import { validateEmail } from "@/utils/validator"
 
 const Form: FC = () => {
@@ -36,8 +44,15 @@ const Form: FC = () => {
       setAccessToken(result.data.accessToken)
       setRefreshToken(result.data.refreshToken)
       toast.success("Login successfully")
+      setTimeout(() => {
+        navigate(RouterName.HOME)
+      }, 1000)
     } catch (error) {
-      toast.error(`Login failed`)
+      toast.error(
+        `Login failed : ${
+          ((error as AxiosError).response?.data as ErrorType).message
+        }`
+      )
     } finally {
       setLoading(false)
     }
@@ -81,6 +96,30 @@ const Form: FC = () => {
 
 const Login: FC = () => {
   const navigate = useNavigate()
+  useEffect(() => {
+    const accessToken = getAccessToken()
+    const refreshToken = getRefreshToken()
+    if (accessToken) {
+      return () => navigate(RouterName.HOME)
+    }
+    if (!accessToken && refreshToken) {
+      refreshTokenFn(refreshToken)
+      return () => navigate(RouterName.HOME)
+    }
+  }, [])
+
+  const refreshTokenFn = async (token: string) => {
+    try {
+      const data = await refreshTokenApi(token)
+      if (data.data) {
+        setAccessToken(data.data.accessToken)
+        setRefreshToken(data.data.refreshToken)
+      }
+    } catch (error) {
+      /* empty */
+    }
+  }
+
   return (
     <div className="px-8 py-2 h-[100vh] flex flex-col">
       <img
