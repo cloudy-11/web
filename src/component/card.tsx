@@ -100,12 +100,14 @@ export const Card: FC<{
   height: number
   isLock?: boolean
   shadowColor?: ColorEnum
+  onClick?: () => void
 }> = ({
   children,
   height,
   isLock = false,
   color = ColorEnum.FFF0E5,
   shadowColor = ColorEnum.OOOOOO,
+  onClick,
 }) => {
   const BodyCard: FC = () => {
     if (isLock) {
@@ -123,7 +125,11 @@ export const Card: FC<{
   }
 
   return (
-    <div style={{ height: height }} className={`relative w-full  pl-1 pt-1 `}>
+    <div
+      onClick={onClick}
+      style={{ height: height }}
+      className={`relative w-full  pl-1 pt-1 `}
+    >
       <BodyCard />
       <ShadowCard style={{ height: height }} color={shadowColor}></ShadowCard>
     </div>

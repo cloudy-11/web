@@ -1,10 +1,11 @@
 import { FC, useEffect } from "react"
 
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useNavigate } from "react-router-dom"
 import tw from "twin.macro"
 
 import { Card } from "@/component/card"
 import { Loading } from "@/component/loading"
+import { RouterName } from "@/const/router"
 import CodeStore from "@/store/code"
 import { Category } from "@/types/category"
 
@@ -14,9 +15,19 @@ const Section = tw.div`gap-4 w-full px-8`
 const Heading = tw.div`text-lg font-medium`
 
 const GridItem: FC<{ categories: Category[] }> = ({ categories }) => {
+  const navigate = useNavigate()
   const list = categories.map((item) => {
     return (
-      <Card key={item.id} height={150} isLock={item.isLock}>
+      <Card
+        onClick={() => {
+          if (!item.isLock) {
+            navigate(`${RouterName.CODE}/${item.slug}-${item.id}`)
+          }
+        }}
+        key={item.id}
+        height={150}
+        isLock={item.isLock}
+      >
         <div className="flex flex-col">
           <div className="text-md font-medium">{item.name}</div>
         </div>

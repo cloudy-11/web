@@ -1,6 +1,7 @@
 import { api } from "@/api/interceptor"
 import { Category, CategoryType } from "@/types/category"
 import { RSP } from "@/types/common"
+import { Question } from "@/types/question"
 import { User } from "@/types/user"
 
 export const refreshTokenApi = async (
@@ -58,6 +59,14 @@ export const getCategoriesApi = async (
   type: CategoryType
 ): Promise<RSP<Category[]>> => {
   const { data } = await api.get(`/category?type=${type}`)
+
+  return data
+}
+
+export const getQuestionsApi = async (
+  categoryId: string
+): Promise<RSP<Question[]>> => {
+  const { data } = await api.get(`/question?categoryId=${categoryId}`)
 
   return data
 }

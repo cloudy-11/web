@@ -1,6 +1,6 @@
 export enum CategoryType {
-  CODE="code",
-  ENGLISH="english"
+  CODE = "code",
+  ENGLISH = "english",
 }
 
 export type Category = {
@@ -9,4 +9,5 @@ export type Category = {
   level: number
   name: string
   isLock: boolean
+  slug: string
 }
