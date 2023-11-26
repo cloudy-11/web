@@ -1,13 +1,15 @@
-import { FC, useEffect } from "react"
+import { FC, useEffect, useState } from "react"
 
 import { Ghost } from "react-kawaii"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom"
 import tw from "twin.macro"
 
 import { Card } from "@/component/card"
+import { RouterName } from "@/const/router"
 import QuestionStore from "@/store/question"
 import { ColorEnum } from "@/types/common"
 import { Question } from "@/types/question"
+import { getAccessToken } from "@/utils/helper"
 
 const Main = tw.div`max-w-[1200px] w-full h-full mt-[70px] flex flex-col items-end gap-12`
 
@@ -47,6 +49,51 @@ const QuestionCard: FC = () => {
   return <div className="p-8 w-2/3 h-full flex flex-col gap-4">{list}</div>
 }
 
+const SubmitSession: FC<{ questionActive: Question }> = ({
+  questionActive,
+}) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [sumitUrl, setSubmitUrl] = useState<string>("")
+  const accessToken = getAccessToken()
+
+  if (!accessToken) {
+    return (
+      <Card
+        height={40}
+        color={ColorEnum.OOOOOO}
+        shadowColor={ColorEnum.FFFFFF}
+        onClick={() =>
+          navigate(`${RouterName.LOGIN}?redirect=${location.pathname}`)
+        }
+      >
+        <div className="text-white">LOG IN TO SUBMIT</div>
+      </Card>
+    )
+  }
+
+  return (
+    <div className="p-4 flex flex-col gap-4 border-2 border-black rounded-lg">
+      <p
+        className="font-medium underline cursor-pointer"
+        onClick={() => {
+          window.open(questionActive.url, "_blank")
+        }}
+      >
+        Link question
+      </p>
+      <input
+        onChange={(e) => setSubmitUrl(e.target.value)}
+        placeholder="Url Submission"
+        className="outline-none border border-1 border-gray-500 rounded-md px-2 py-1 "
+      />
+      <Card height={40} color={ColorEnum.A3E635} isLock={sumitUrl === ""}>
+        SUBMIT
+      </Card>
+    </div>
+  )
+}
+
 const QuestInfo: FC = () => {
   const questionActive = QuestionStore.useStoreState(
     (state) => state.questionActive
@@ -56,9 +103,7 @@ const QuestInfo: FC = () => {
   }
   return (
     <div className="p-8 flex flex-col gap-4 border-l-2 border-black fixed w-[400px] h-full">
-      <Card height={40} color={ColorEnum.A3E635}>
-        SUBMIT
-      </Card>
+      <SubmitSession questionActive={questionActive} />
       <div className="text-xl font-bold">Reward</div>
       <div className="flex flex-row gap-4">
         <Ghost size={30} mood="blissful" color="#40CEF1" />

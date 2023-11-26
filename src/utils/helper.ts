@@ -1,6 +1,9 @@
+import React from "react"
+
 import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next"
 import { jwtDecode } from "jwt-decode"
 import toast from "react-hot-toast"
+import { useLocation } from "react-router-dom"
 
 import { refreshTokenApi } from "@/api/route"
 import { User } from "@/types/user"
@@ -46,8 +49,8 @@ export const setCookieSocket = async () => {
     const data = await refreshTokenApi(refreshToken)
     try {
       if (data.data) {
-        setAccessToken(data.data.access_token)
-        setRefreshToken(data.data.refresh_token)
+        setAccessToken(data.data.accessToken)
+        setRefreshToken(data.data.refreshToken)
       }
     } catch (error) {
       return
@@ -127,4 +130,10 @@ export const onCopy = (url: string) => {
       },
     })
   }
+}
+
+export const useQuery = () => {
+  const { search } = useLocation()
+
+  return React.useMemo(() => new URLSearchParams(search), [search])
 }

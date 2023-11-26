@@ -26,10 +26,33 @@ export const api = axios.create({
   withCredentials: false, // to send cookie
 })
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
   const accessToken = getAccessToken()
+  const refreshToken = getRefreshToken()
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
+  }
+  if (refreshToken && !accessToken) {
+    await mutex.acquire()
+    try {
+      const data = await refreshTokenApi(refreshToken)
+      // 5. set header and cookies
+      const originalRequest = config
+      originalRequest.headers["Authorization"] =
+        "Bearer " + data.data.accessToken
+      setAccessToken(data.data.accessToken)
+      setRefreshToken(data.data.refreshToken)
+      // 6. Recall request
+    } catch (error) {
+      Promise.reject(error)
+    } finally {
+      mutex.release()
+    }
+  }
+
+  if (!refreshToken && !accessToken) {
+    delCookies()
+    clearLocalStorage()
   }
 
   return config
@@ -40,6 +63,7 @@ api.interceptors.response.use(
     return response
   },
   async (error: AxiosError) => {
+    console.log(error)
     // check conditions to refresh token
     if (error.response?.status === 401) {
       // 1. Check code response
