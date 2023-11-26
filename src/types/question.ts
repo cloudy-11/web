@@ -8,4 +8,5 @@ export type Question = {
   isLock: boolean
   slug: string
   ghost: number
+  url: string
 }

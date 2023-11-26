@@ -15,6 +15,7 @@ import {
   setAccessToken,
   setRefreshToken,
   setUserLocal,
+  useQuery,
 } from "@/utils/helper"
 import { validateEmail } from "@/utils/validator"
 
@@ -23,6 +24,7 @@ const Form: FC = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
+  const query = useQuery()
 
   const onSubmit = async () => {
     if (email === "" || password === "") {
@@ -44,9 +46,13 @@ const Form: FC = () => {
       setAccessToken(result.data.accessToken)
       setRefreshToken(result.data.refreshToken)
       toast.success("Login successfully")
-      setTimeout(() => {
+      const redirect = query.get("redirect")
+
+      if (!redirect) {
         navigate(RouterName.HOME)
-      }, 1000)
+      } else {
+        navigate(redirect)
+      }
     } catch (error) {
       toast.error(
         `Login failed : ${
