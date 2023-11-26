@@ -92,6 +92,7 @@ const LockCard = tw.div`
   p-2
   justify-end
   items-start
+  cursor-not-allowed
 `
 
 export const Card: FC<{
@@ -126,7 +127,7 @@ export const Card: FC<{
 
   return (
     <div
-      onClick={onClick}
+      onClick={!isLock ? onClick : () => {}}
       style={{ height: height }}
       className={`relative w-full  pl-1 pt-1 `}
     >

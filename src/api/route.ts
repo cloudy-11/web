@@ -75,3 +75,15 @@ export const getQuestionsApi = async (
 
   return data
 }
+
+export const createSubmissionApi = async (
+  questionId: string,
+  url: string
+): Promise<RSP<Question[]>> => {
+  const { data } = await api.post(`/submission`, {
+    questionId,
+    url,
+  })
+
+  return data
+}

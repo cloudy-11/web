@@ -1,13 +1,16 @@
 import { FC, useEffect, useState } from "react"
 
+import { AxiosError } from "axios"
+import toast from "react-hot-toast"
 import { Ghost } from "react-kawaii"
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom"
 import tw from "twin.macro"
 
+import { createSubmissionApi } from "@/api/route"
 import { Card } from "@/component/card"
 import { RouterName } from "@/const/router"
 import QuestionStore from "@/store/question"
-import { ColorEnum } from "@/types/common"
+import { ColorEnum, ErrorType } from "@/types/common"
 import { Question } from "@/types/question"
 import { getAccessToken } from "@/utils/helper"
 
@@ -57,6 +60,15 @@ const SubmitSession: FC<{ questionActive: Question }> = ({
   const [sumitUrl, setSubmitUrl] = useState<string>("")
   const accessToken = getAccessToken()
 
+  const submit = async () => {
+    try {
+      await createSubmissionApi(questionActive.id, sumitUrl)
+      toast.success("Submit successfully")
+    } catch (error) {
+      toast.error(((error as AxiosError).response?.data as ErrorType).message)
+    }
+  }
+
   if (!accessToken) {
     return (
       <Card
@@ -87,7 +99,12 @@ const SubmitSession: FC<{ questionActive: Question }> = ({
         placeholder="Url Submission"
         className="outline-none border border-1 border-gray-500 rounded-md px-2 py-1 "
       />
-      <Card height={40} color={ColorEnum.A3E635} isLock={sumitUrl === ""}>
+      <Card
+        onClick={submit}
+        height={40}
+        color={ColorEnum.A3E635}
+        isLock={sumitUrl === ""}
+      >
         SUBMIT
       </Card>
     </div>
@@ -115,7 +132,7 @@ const QuestInfo: FC = () => {
         <p className="font-semibold">{questionActive.title}</p>
         <p>{questionActive.description}</p>
       </div>
-      <div className="text-xl font-bold">Quester</div>
+      {/* <div className="text-xl font-bold">Quester</div> */}
     </div>
   )
 }
