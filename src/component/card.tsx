@@ -58,6 +58,7 @@ const MainCard = styled.div<{ color: ColorEnum }>(({ color }) => {
   mt-2
   select-none
   h-full
+  p-4
 `,
   ]
   if (color === ColorEnum.FFF0E5) {

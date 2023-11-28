@@ -7,7 +7,7 @@ import { Card } from "@/component/card"
 import { Loading } from "@/component/loading"
 import { RouterName } from "@/const/router"
 import CodeStore from "@/store/code"
-import { Category } from "@/types/category"
+import { Category, CategoryLevel } from "@/types/category"
 
 const Main = tw.div`max-w-[1200px] w-full mt-[80px] flex flex-col gap-12 py-8`
 const Center = tw.div`w-full h-full flex justify-center items-center`
@@ -34,7 +34,11 @@ const GridItem: FC<{ categories: Category[] }> = ({ categories }) => {
       </Card>
     )
   })
-  return <div className="w-full grid grid-cols-4 gap-4">{list}</div>
+  return (
+    <div className="w-full grid grid-cols-4 max-md:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-3 gap-4">
+      {list}
+    </div>
+  )
 }
 
 const HomeIndex: FC = () => {
@@ -66,15 +70,27 @@ const HomeIndex: FC = () => {
     <Main>
       <Section>
         <Heading>{"ELEMENTARY"}</Heading>
-        <GridItem categories={codes.filter((code) => code.level === 1)} />
+        <GridItem
+          categories={codes.filter(
+            (code) => code.level === CategoryLevel.ELEMENTARY
+          )}
+        />
       </Section>
       <Section>
         <Heading>{"INTERMEDIATE"}</Heading>
-        <GridItem categories={codes.filter((code) => code.level === 2)} />
+        <GridItem
+          categories={codes.filter(
+            (code) => code.level === CategoryLevel.INTERMEDIATE
+          )}
+        />
       </Section>
       <Section>
         <Heading>{"ADVANCED"}</Heading>
-        <GridItem categories={codes.filter((code) => code.level === 3)} />
+        <GridItem
+          categories={codes.filter(
+            (code) => code.level === CategoryLevel.ADVANCED
+          )}
+        />
       </Section>
     </Main>
   )
