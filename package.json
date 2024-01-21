@@ -19,6 +19,7 @@
     "easy-peasy": "^6.0.4",
     "jdenticon": "^3.2.0",
     "jwt-decode": "^4.0.0",
+    "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -29,6 +30,7 @@
     "twin.macro": "^3.4.0"
   },
   "devDependencies": {
+    "@types/nprogress": "^0.2.3",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-kawaii": "^0.17.3",

@@ -1,5 +1,6 @@
 import { FC } from "react"
 
+import nProgress from "nprogress"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import logo from "@/assets/logo.png"
@@ -26,15 +27,33 @@ const Left: FC = () => {
   return (
     <div className="w-1/2 flex flex-row justify-start items-center gap-2">
       <img
-        onClick={() => navigate(RouterName.HOME)}
+        onClick={() => {
+          nProgress.start()
+          navigate(RouterName.HOME)
+          nProgress.done()
+        }}
         className="cursor-pointer"
         src={logo}
         width={80}
       />
-      <div className={homeLocate} onClick={() => navigate(RouterName.HOME)}>
+      <div
+        className={homeLocate}
+        onClick={() => {
+          nProgress.start()
+          navigate(RouterName.HOME)
+          nProgress.done()
+        }}
+      >
         Coding
       </div>
-      <div className={engLocate} onClick={() => navigate(RouterName.ENGLISH)}>
+      <div
+        className={engLocate}
+        onClick={() => {
+          nProgress.start()
+          navigate(RouterName.ENGLISH)
+          nProgress.done()
+        }}
+      >
         English
       </div>
     </div>

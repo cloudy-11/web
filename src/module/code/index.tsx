@@ -1,5 +1,6 @@
 import { FC, useEffect } from "react"
 
+import nProgress from "nprogress"
 import { useLoaderData, useNavigate } from "react-router-dom"
 import tw from "twin.macro"
 
@@ -21,7 +22,9 @@ const GridItem: FC<{ categories: Category[] }> = ({ categories }) => {
       <Card
         onClick={() => {
           if (!item.isLock) {
+            nProgress.start()
             navigate(`${RouterName.CODE}/${item.slug}-${item.id}`)
+            nProgress.done()
           }
         }}
         key={item.id}
